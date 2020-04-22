@@ -8,7 +8,7 @@ import ShopPage from './pages/shop/shoppage.component';
 import SignInSignUpPage from './pages/sign-in-sing-up/sign-in-sing-up.component';
 
 import Header from './components/header/header.component';
-import { auth } from './firebase/firebase.util';
+import { auth, createUserProfileDocument } from './firebase/firebase.util';
 
 // Exact means that home page will render only when path is exact match. / is base address, in dev mode it localhost.3000.
 // Switch will only match one url at the same time.
@@ -24,9 +24,23 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    auth.onAuthStateChanged(user => {
-      this.setState({ currentUser: user });
-    })
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
+
+        userRef.onSnapshot(snapShot => {
+          this.setState({
+            currentUser: {
+              id: snapShot.id,
+              ...snapShot.data()
+            }
+          });
+          console.log(this.state.currentUser)
+        })
+      } else {
+        this.setState({ currentUser: userAuth }); // userAuth is null here i.e. null is falsy
+      }
+    });
   }
 
   componentWillUnmount() {
