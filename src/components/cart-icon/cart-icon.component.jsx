@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { toggleCartHidden } from '../../redux/cart/cart.action';
 import { ReactComponent as ShoppingIcon } from '../../assets/shoppingcart.svg';
 import { selectCartItemsCount } from '../../redux/cart/cart.selectors';
+import { createStructuredSelector } from 'reselect';
+
 
 import './cart-icon.styles.scss';
 
@@ -19,8 +21,8 @@ const mapDispatchToProps = dispatch => ({
 })
 
 //reaseon to use selectors (selectCartItemsCount) and createSelector from reselect is that you get a memoization on the value.
-const mapStateToProps = (state) => ({
-    itemCount: selectCartItemsCount(state)
+const mapStateToProps = createStructuredSelector({
+    itemCount: selectCartItemsCount
 })
 
 export default connect(

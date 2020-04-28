@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import CustomButton from '../custom-button/custom-button.component';
 import CartItem from '../cart-item/cart-item.component';
 import { selectCartItems } from '../../redux/cart/cart.selectors';
+import { createStructuredSelector } from 'reselect';
+
 
 import './cart-dropdown.styles.scss';
 
@@ -20,8 +22,8 @@ const Cart = ({ cartItems }) => (
 )
 //cart is on state and cartItems is on cart.
 //cart selector make sure cart component do not rerender when changes does not concern cart
-const mapStateToProps = (state) => ({
-    cartItems: selectCartItems(state)
+const mapStateToProps = createStructuredSelector({
+    cartItems: selectCartItems
 })
 
 export default connect(mapStateToProps)(Cart);
